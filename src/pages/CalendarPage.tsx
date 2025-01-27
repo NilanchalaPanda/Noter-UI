@@ -11,21 +11,21 @@ const sampleNotes: Note[] = [
     title: 'Meeting Notes',
     body: 'Discuss project timeline and deliverables with the team.',
     created: new Date('2024-03-10'),
-    categories: 'business',
+    categories: 'BUSINESS',
   },
   {
     id: '2',
     title: 'Shopping List',
     body: 'Buy groceries for the week: milk, eggs, bread...',
     created: new Date('2024-03-11'),
-    categories: 'personal',
+    categories: 'PERSONAL',
   },
   {
-    id: '3',
+  id: '3',
     title: 'Project Deadline',
     body: 'Complete the project presentation by Friday.',
     created: new Date('2024-03-12'),
-    categories: 'important',
+    categories: 'IMPORTANT',
   },
 ];
 

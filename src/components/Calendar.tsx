@@ -123,9 +123,9 @@ export function Calendar({ notes }: CalendarProps) {
                     <div
                       key={note.id}
                       className={`truncate rounded px-1 py-0.5 text-xs ${
-                        note.categories === 'personal'
+                        note.categories === 'PERSONAL'
                           ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
-                          : note.categories === 'business'
+                          : note.categories === 'BUSINESS'
                             ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
                             : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
                       }`}

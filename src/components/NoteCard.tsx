@@ -8,7 +8,7 @@ interface NoteCardProps {
 }
 
 export function NoteCard({ note }: NoteCardProps) {
-  const timeLeft = note.deadline ? formatTimeLeft(note.deadline) : null;
+  console.log(note)
 
   return (
     <Link
@@ -19,12 +19,6 @@ export function NoteCard({ note }: NoteCardProps) {
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
           {note.title}
         </h3>
-        {timeLeft && (
-          <div className="flex items-center space-x-1 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-            <Clock className="h-4 w-4" />
-            <span>{timeLeft}</span>
-          </div>
-        )}
       </div>
 
       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">

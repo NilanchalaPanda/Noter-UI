@@ -13,12 +13,8 @@ export function NoteForm({ note, onSubmit, onCancel }: NoteFormProps) {
   const [body, setBody] = useState(note?.body || '');
   const [slug, setSlug] = useState(note?.slug || '');
   const [categories, setCategories] = useState<NoteType>(
-    note?.categories || 'personal'
+    note?.categories || 'PERSONAL'
   );
-  const [deadline, setDeadline] = useState(
-    note?.deadline ? new Date(note.deadline).toISOString().split('T')[0] : ''
-  );
-
   const handleTitleAndSlug = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
 
@@ -32,8 +28,7 @@ export function NoteForm({ note, onSubmit, onCancel }: NoteFormProps) {
       title,
       body,
       slug,
-      categories,
-      deadline: deadline ? new Date(deadline) : undefined,
+      categories
     });
   };
 
@@ -112,22 +107,6 @@ export function NoteForm({ note, onSubmit, onCancel }: NoteFormProps) {
           <option value="BUSINESS">Business</option>
           <option value="IMPORTANT">Important</option>
         </select>
-      </div>
-
-      <div>
-        <label
-          htmlFor="deadline"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
-          Deadline (optional)
-        </label>
-        <input
-          type="date"
-          id="deadline"
-          value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
-          className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-        />
       </div>
 
       <div className="flex justify-end space-x-4">

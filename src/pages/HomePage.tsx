@@ -31,7 +31,6 @@ export function HomePage() {
   const [filter, setFilter] = useState<NoteType | 'all'>('all');
   const [notes, setNotes] = useState<Note[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [status, setStatus] = useState<'all' | 'active' | 'overdue'>('all');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -54,11 +53,6 @@ export function HomePage() {
 
   const filteredNotes = notes
     .filter((note) => (filter === 'all' ? true : note.categories === filter))
-    .filter((note) => {
-      if (status === 'all') return true;
-      const isOverdue = note.deadline && new Date(note.deadline) < new Date();
-      return status === 'overdue' ? isOverdue : !isOverdue;
-    });
 
   return (
     <div className="min-h-screen bg-gray-50 font-montserrat dark:bg-gray-900">
@@ -90,9 +84,7 @@ export function HomePage() {
 
         <NoteFilter
           selected={filter}
-          status={status}
           onTypeChange={setFilter}
-          onStatusChange={setStatus}
         />
 
         {loading ? (
