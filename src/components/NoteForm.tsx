@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Note, NoteType } from '../types/note';
 
@@ -11,17 +11,28 @@ interface NoteFormProps {
 export function NoteForm({ note, onSubmit, onCancel }: NoteFormProps) {
   const [title, setTitle] = useState(note?.title || '');
   const [body, setBody] = useState(note?.body || '');
-  const [type, setType] = useState<NoteType>(note?.type || 'personal');
+  const [slug, setSlug] = useState(note?.slug || '');
+  const [categories, setCategories] = useState<NoteType>(
+    note?.categories || 'personal'
+  );
   const [deadline, setDeadline] = useState(
     note?.deadline ? new Date(note.deadline).toISOString().split('T')[0] : ''
   );
+
+  const handleTitleAndSlug = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+
+    const titleVal = e.target.value;
+    setSlug(titleVal.toLowerCase().split(' ').join('-'));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       title,
       body,
-      type,
+      slug,
+      categories,
       deadline: deadline ? new Date(deadline) : undefined,
     });
   };
@@ -44,7 +55,24 @@ export function NoteForm({ note, onSubmit, onCancel }: NoteFormProps) {
           type="text"
           id="title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleTitleAndSlug}
+          className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          required
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="slug"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+        >
+          Slug
+        </label>
+        <input
+          disabled
+          type="slug"
+          id="slug"
+          value={slug}
           className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
           required
         />
@@ -69,20 +97,20 @@ export function NoteForm({ note, onSubmit, onCancel }: NoteFormProps) {
 
       <div>
         <label
-          htmlFor="type"
+          htmlFor="categories"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300"
         >
           Type
         </label>
         <select
-          id="type"
-          value={type}
-          onChange={(e) => setType(e.target.value as NoteType)}
+          id="categories"
+          value={categories}
+          onChange={(e) => setCategories(e.target.value as NoteType)}
           className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
         >
-          <option value="personal">Personal</option>
-          <option value="business">Business</option>
-          <option value="important">Important</option>
+          <option value="PERSONAL">Personal</option>
+          <option value="BUSINESS">Business</option>
+          <option value="IMPORTANT">Important</option>
         </select>
       </div>
 

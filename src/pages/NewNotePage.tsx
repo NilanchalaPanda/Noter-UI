@@ -3,15 +3,23 @@ import { Navbar } from '../components/Navbar';
 import { NoteForm } from '../components/NoteForm';
 import toast from 'react-hot-toast';
 import type { Note } from '../types/note';
+import axios from 'axios';
 
 export function NewNotePage() {
   const navigate = useNavigate();
 
-  const handleSubmit = (noteData: Omit<Note, 'id' | 'created'>) => {
-    // Add actual create logic here
-    console.log('Creating note:', noteData);
-    toast.success('Note created successfully');
-    navigate('/');
+  const handleSubmit = async (noteData: Omit<Note, 'id' | 'created'>) => {
+    try {
+      axios.post('http://127.0.0.1:8000/notes/', noteData);
+      toast.success('Note created successfully!');
+      navigate('/')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error('Failed to create note. Please try again later.');
+      } else {
+        toast.error('An unexpected error occurred.');
+      }
+    }
   };
 
   return (

@@ -9,7 +9,7 @@ import { NewNotePage } from './pages/NewNotePage';
 function App() {
   return (
     <BrowserRouter>
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/new" element={<NewNotePage />} />

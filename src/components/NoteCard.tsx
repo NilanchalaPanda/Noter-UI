@@ -1,7 +1,6 @@
 import { Calendar, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Note } from '../types/note';
-import { formatDate } from '../utils/formatDate';
 import { formatTimeLeft } from '../utils/formatTimeLeft';
 
 interface NoteCardProps {
@@ -13,7 +12,7 @@ export function NoteCard({ note }: NoteCardProps) {
 
   return (
     <Link
-      to={`/note/${note.id}`}
+      to={`/note/${note.slug}`}
       className="group block space-y-3 rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
     >
       <div className="flex items-start justify-between">
@@ -30,31 +29,31 @@ export function NoteCard({ note }: NoteCardProps) {
 
       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
         <Calendar className="mr-1 h-4 w-4" />
-        <span>{formatDate(note.created)}</span>
+        <span>{new Date(note.created).toLocaleDateString()}</span>
       </div>
 
       <p className="line-clamp-3 text-gray-600 dark:text-gray-300">
-        {note.body}
+        {`${note.body.split(' ').slice(0, 10).join(' ')}...`}
       </p>
 
       <div
         className="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium"
         style={{
           backgroundColor:
-            note.type === 'personal'
+            note.categories === 'PERSONAL'
               ? 'rgba(59, 130, 246, 0.1)'
-              : note.type === 'business'
+              : note.categories === 'BUSINESS'
                 ? 'rgba(16, 185, 129, 0.1)'
                 : 'rgba(239, 68, 68, 0.1)',
           color:
-            note.type === 'personal'
+            note.categories === 'PERSONAL'
               ? 'rgb(59, 130, 246)'
-              : note.type === 'business'
+              : note.categories === 'BUSINESS'
                 ? 'rgb(16, 185, 129)'
                 : 'rgb(239, 68, 68)',
         }}
       >
-        {note.type.charAt(0).toUpperCase() + note.type.slice(1)}
+        {note.categories}
       </div>
     </Link>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -8,34 +8,9 @@ import { NoteCard } from '../components/NoteCard';
 import { SearchModal } from '../components/SearchModal';
 import { EmptyState } from '../components/EmptyState';
 import type { Note, NoteType } from '../types/note';
-
-// Sample data - replace with actual data management
-const sampleNotes: Note[] = [
-  {
-    id: '1',
-    title: 'Meeting Notes',
-    body: 'Discuss project timeline and deliverables with the team.',
-    created: new Date('2024-03-10'),
-    deadline: new Date('2024-03-15'),
-    type: 'business',
-  },
-  {
-    id: '2',
-    title: 'Shopping List',
-    body: 'Buy groceries for the week: milk, eggs, bread...',
-    created: new Date('2024-03-11'),
-    deadline: new Date('2024-03-12'),
-    type: 'personal',
-  },
-  {
-    id: '3',
-    title: 'Project Deadline',
-    body: 'Complete the project presentation by Friday.',
-    created: new Date('2024-03-12'),
-    deadline: new Date('2024-03-17'),
-    type: 'important',
-  },
-];
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { SkeletonCard } from '../components/SkeletonCard';
 
 const container = {
   hidden: { opacity: 0 },
@@ -54,11 +29,31 @@ const item = {
 
 export function HomePage() {
   const [filter, setFilter] = useState<NoteType | 'all'>('all');
+  const [notes, setNotes] = useState<Note[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
   const [status, setStatus] = useState<'all' | 'active' | 'overdue'>('all');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const filteredNotes = sampleNotes
-    .filter((note) => (filter === 'all' ? true : note.type === filter))
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/notes/');
+        setNotes(response.data);
+        setLoading(false);
+      } catch(err) {
+        toast.error('Failed to load notes. Please try again later.');
+        console.log(err)
+        setLoading(false);
+      }
+    };
+
+    fetchNotes();
+  }, []);
+
+
+
+  const filteredNotes = notes
+    .filter((note) => (filter === 'all' ? true : note.categories === filter))
     .filter((note) => {
       if (status === 'all') return true;
       const isOverdue = note.deadline && new Date(note.deadline) < new Date();
@@ -100,7 +95,20 @@ export function HomePage() {
           onStatusChange={setStatus}
         />
 
-        {filteredNotes.length === 0 ? (
+        {loading ? (
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
+            {[...Array(6)].map((_, index) => (
+              <motion.div key={index} variants={item}>
+                <SkeletonCard />
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : filteredNotes.length === 0 ? (
           <EmptyState />
         ) : (
           <motion.div
@@ -118,11 +126,10 @@ export function HomePage() {
         )}
       </main>
 
-      {/* Pass setIsSearchOpen to SearchModal */}
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)} // Close the modal
-        notes={sampleNotes}
+        notes={notes}
         setIsSearchOpen={setIsSearchOpen} // Pass setIsSearchOpen to control modal visibility
       />
     </div>
