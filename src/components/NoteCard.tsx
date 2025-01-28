@@ -1,7 +1,6 @@
-import { Calendar, Clock } from 'lucide-react';
+import { Calendar} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import type { Note } from '../types/note';
-import { formatTimeLeft } from '../utils/formatTimeLeft';
 
 interface NoteCardProps {
   note: Note;
