@@ -37,9 +37,6 @@ export function HomePage() {
     const fetchNotes = async () => {
       const base_url = import.meta.env.DEV ? import.meta.env.VITE_DEV_BASE_URL : import.meta.env.VITE_PROD_BASE_URL;
 
-      console.log(base_url)
-      console.log(import.meta.env.DEV)
-
       try {
         const response = await axios.get(`${base_url}/notes/`);
         setNotes(response.data);
