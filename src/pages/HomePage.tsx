@@ -29,19 +29,24 @@ const item = {
 
 export function HomePage() {
   const [filter, setFilter] = useState<NoteType | 'all'>('all');
-  const [notes, setNotes] = useState<Note[]>([])
-  const [loading, setLoading] = useState<boolean>(false)
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const fetchNotes = async () => {
+      const base_url = import.meta.env.DEV ? import.meta.env.VITE_DEV_BASE_URL : import.meta.env.VITE_PROD_BASE_URL;
+
+      console.log(base_url)
+      console.log(import.meta.env.DEV)
+
       try {
-        const response = await axios.get('http://127.0.0.1:8000/notes/');
+        const response = await axios.get(`${base_url}/notes/`);
         setNotes(response.data);
         setLoading(false);
-      } catch(err) {
+      } catch (err) {
         toast.error('Failed to load notes. Please try again later.');
-        console.log(err)
+        console.log(err);
         setLoading(false);
       }
     };
@@ -49,10 +54,9 @@ export function HomePage() {
     fetchNotes();
   }, []);
 
-
-
-  const filteredNotes = notes
-    .filter((note) => (filter === 'all' ? true : note.categories === filter))
+  const filteredNotes = notes.filter((note) =>
+    filter === 'all' ? true : note.categories === filter
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 font-montserrat dark:bg-gray-900">
@@ -82,10 +86,7 @@ export function HomePage() {
           </div>
         </div>
 
-        <NoteFilter
-          selected={filter}
-          onTypeChange={setFilter}
-        />
+        <NoteFilter selected={filter} onTypeChange={setFilter} />
 
         {loading ? (
           <motion.div

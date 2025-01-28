@@ -15,8 +15,12 @@ export function NotePage() {
 
   useEffect(() => {
     const getNote = async () => {
+      const base_url = import.meta.env.DEV
+        ? import.meta.env.VITE_DEV_BASE_URL
+        : import.meta.env.VITE_PROD_BASE_URL;
+
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/notes/${id}`);
+        const response = await axios.get(`${base_url}/notes/${id}`);
         setNote(response.data);
       } catch (err) {
         toast.error('Could not find the note!');
@@ -28,9 +32,13 @@ export function NotePage() {
   }, []);
 
   const handleDelete = () => {
+    const base_url = import.meta.env.DEV
+      ? import.meta.env.VITE_DEV_BASE_URL
+      : import.meta.env.VITE_PROD_BASE_URL;
+
     try {
       axios
-        .delete(`http://127.0.0.1:8000/notes/${id}/`)
+        .delete(`${base_url}/notes/${id}/`)
         .then(() => toast.success('Note deleted!'))
         .catch(() => toast.error('Something went wrong'));
 
@@ -43,8 +51,12 @@ export function NotePage() {
 
   const handleUpdate = (noteData: Omit<Note, 'id' | 'created'>) => {
     try {
+      const base_url = import.meta.env.DEV
+        ? import.meta.env.VITE_DEV_BASE_URL
+        : import.meta.env.VITE_PROD_BASE_URL;
+
       axios
-        .put(`http://127.0.0.1:8000/notes/${id}/`, noteData)
+        .put(`${base_url}/notes/${id}/`, noteData)
         .then((res) => {
           console.log(res.data);
           toast.success('Note updated successfully!');

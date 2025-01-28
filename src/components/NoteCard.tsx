@@ -8,8 +8,6 @@ interface NoteCardProps {
 }
 
 export function NoteCard({ note }: NoteCardProps) {
-  console.log(note)
-
   return (
     <Link
       to={`/note/${note.slug}`}

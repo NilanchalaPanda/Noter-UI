@@ -9,10 +9,14 @@ export function NewNotePage() {
   const navigate = useNavigate();
 
   const handleSubmit = async (noteData: Omit<Note, 'id' | 'created'>) => {
+    const base_url = import.meta.env.DEV
+      ? import.meta.env.VITE_DEV_BASE_URL
+      : import.meta.env.VITE_PROD_BASE_URL;
+
     try {
-      axios.post('http://127.0.0.1:8000/notes/', noteData);
+      axios.post(`${base_url}/notes/`, noteData);
       toast.success('Note created successfully!');
-      navigate('/')
+      navigate('/');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error('Failed to create note. Please try again later.');
